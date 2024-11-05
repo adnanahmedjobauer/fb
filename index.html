@@ -5,9 +5,12 @@
 </head>
 <body>
     <h1>Facebook Auto Post Automation</h1>
-    <p>Loading a random caption for Facebook post...</p>
+    <p id="statusMessage">Loading a random caption for Facebook post...</p>
 
     <script>
+        // HTML এলিমেন্ট যেখানে স্ট্যাটাস দেখানো হবে
+        const statusMessage = document.getElementById('statusMessage');
+
         // story.txt ফাইল লোড করা
         fetch('story.txt')
             .then(response => {
@@ -23,6 +26,7 @@
                 const randomCaption = captions[Math.floor(Math.random() * captions.length)];
 
                 console.log("Selected Caption:", randomCaption);
+                statusMessage.textContent = "Posting to Facebook...";
 
                 // Facebook API কল করার জন্য কোড (API URL এবং Access Token প্রয়োজন)
                 const accessToken = 'EAAHi9dZA2sAcBO6qdVTItKD1XyFsWitRWFTSNI8Cs1IM0GGGbmy0scPKD4TYykmh3nhsjCSbprfw1gOiZAocnaU01ZC8Qo2N1yvsnS0jkOXPVFHAHaVfte19XZCq1kBCCZB3OnTtd3GTfqpEwZBjanZABM9je6JXMranQwTTE2jX9D1ZAXUZB0lOoJeMBhQsiWVs6r6NM8MOOLnYyVm2xuQZDZD'; // তোমার অ্যাক্সেস টোকেন
@@ -38,13 +42,21 @@
                 .then(response => {
                     if (response.ok) {
                         console.log("Post successful!");
+                        statusMessage.textContent = "Post successful!";
                     } else {
                         console.error("Post failed:", response);
+                        statusMessage.textContent = "Post failed. Please check the console for more details.";
                     }
                 })
-                .catch(error => console.error('Error posting to Facebook:', error));
+                .catch(error => {
+                    console.error('Error posting to Facebook:', error);
+                    statusMessage.textContent = "Error posting to Facebook: " + error.message;
+                });
             })
-            .catch(error => console.error('Error loading story:', error));
+            .catch(error => {
+                console.error('Error loading story:', error);
+                statusMessage.textContent = "Error loading story: " + error.message;
+            });
     </script>
 </body>
 </html>
