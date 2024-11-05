@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facebook Auto Post</title>
+</head>
+<body>
+    <h1>Facebook Auto Post Automation</h1>
+    <p>Loading a random caption for Facebook post...</p>
+
+    <script>
+        // story.txt ফাইল লোড করা
+        fetch('story.txt')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(text => {
+                // সমস্ত ক্যাপশন লাইনে বিভক্ত করা
+                const captions = text.split('\n');
+                // এলোমেলোভাবে একটি ক্যাপশন বেছে নেওয়া
+                const randomCaption = captions[Math.floor(Math.random() * captions.length)];
+
+                console.log("Selected Caption:", randomCaption);
+
+                // Facebook API কল করার জন্য কোড (API URL এবং Access Token প্রয়োজন)
+                const accessToken = 'EAAHi9dZA2sAcBO6qdVTItKD1XyFsWitRWFTSNI8Cs1IM0GGGbmy0scPKD4TYykmh3nhsjCSbprfw1gOiZAocnaU01ZC8Qo2N1yvsnS0jkOXPVFHAHaVfte19XZCq1kBCCZB3OnTtd3GTfqpEwZBjanZABM9je6JXMranQwTTE2jX9D1ZAXUZB0lOoJeMBhQsiWVs6r6NM8MOOLnYyVm2xuQZDZD'; // তোমার অ্যাক্সেস টোকেন
+                const pageId = '109896575144200'; // ফেসবুক পেজ আইডি
+                const apiUrl = `https://graph.facebook.com/${pageId}/feed?access_token=${accessToken}`;
+
+                // Facebook API-তে পোস্ট করার জন্য Fetch API ব্যবহার
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: randomCaption })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Post successful!");
+                    } else {
+                        console.error("Post failed:", response);
+                    }
+                })
+                .catch(error => console.error('Error posting to Facebook:', error));
+            })
+            .catch(error => console.error('Error loading story:', error));
+    </script>
+</body>
+</html>
